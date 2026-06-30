@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>РЕДИБРОКЕР — Помощь в получении кредита</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0A2540; --primary-light: #1a3a5c; --accent: #00D26A; --accent-dark: #00b85a;
+            --brand-red: #E31E24; --brand-red-light: #f0353a;
+            --text: #1a1a2e; --text-light: #5a6a7a; --text-muted: #8a9aaa;
+            --bg: #ffffff; --bg-light: #f8fafc; --bg-dark: #f0f4f8; --border: #e2e8f0; --border-light: #f1f5f9;
+            --white: #ffffff; --shadow: 0 4px 24px rgba(10, 37, 64, 0.08); --shadow-hover: 0 8px 40px rgba(10, 37, 64, 0.12);
+            --tg: #0088cc; --tg-dark: #0077b3; --wa: #25D366; --wa-dark: #1ebe57;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .anim { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .anim.visible { opacity: 1; transform: translateY(0); }
+        .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; } .d4 { transition-delay: 0.4s; } .d5 { transition-delay: 0.5s; }
+
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-light); transition: all 0.3s ease; }
+        header.scrolled { box-shadow: var(--shadow); }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--brand-red), var(--primary)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 18px; }
+        .logo-text { font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+        .header-nav { display: flex; gap: 32px; align-items: center; }
+        .header-nav a { font-size: 14px; font-weight: 500; color: var(--text-light); text-decoration: none; transition: color 0.3s ease; }
+        .header-nav a:hover { color: var(--primary); }
+        .header-phone { display: flex; flex-direction: column; align-items: flex-end; }
+        .header-phone a { font-size: 16px; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .header-phone span { font-size: 12px; color: var(--accent); font-weight: 600; }
+
+        .hero { padding: 140px 40px 80px; background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg) 100%); position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0, 210, 106, 0.06) 0%, transparent 70%); border-radius: 50%; }
+        .hero-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-dark); border-radius: 50px; font-size: 13px; font-weight: 600; color: var(--text-light); margin-bottom: 24px; }
+        .hero-badge-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+        .hero h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 800; line-height: 1.1; letter-spacing: -2px; color: var(--primary); margin-bottom: 24px; }
+        .hero h1 em { font-style: normal; color: var(--brand-red); }
+        .hero-subtitle { font-size: 18px; color: var(--text-light); line-height: 1.7; margin-bottom: 32px; max-width: 480px; }
+        .hero-stats { display: flex; gap: 40px; margin-bottom: 40px; }
+        .hero-stat { display: flex; flex-direction: column; }
+        .hero-stat-num { font-size: 32px; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        .hero-stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; border-radius: 12px; font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; border: none; cursor: pointer; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 16px rgba(10, 37, 64, 0.2); }
+        .btn-primary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 37, 64, 0.3); }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--border); }
+        .btn-outline:hover { border-color: var(--primary); background: var(--bg-light); }
+        .btn-tg { background: var(--tg); color: white; box-shadow: 0 4px 16px rgba(0, 136, 204, 0.25); }
+        .btn-tg:hover { background: var(--tg-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 136, 204, 0.35); }
+        .btn-wa { background: var(--wa); color: white; box-shadow: 0 4px 16px rgba(37, 211, 102, 0.25); }
+        .btn-wa:hover { background: var(--wa-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35); }
+        .hero-image-side { position: relative; }
+        .hero-visual { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+        .hero-big-num { font-size: 120px; font-weight: 800; color: var(--primary); letter-spacing: -4px; line-height: 1; background: linear-gradient(135deg, var(--primary), var(--brand-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-big-label { font-size: 18px; color: var(--text-light); font-weight: 500; text-align: center; }
+        .hero-big-sub { font-size: 14px; color: var(--text-muted); }
+        .hero-float-card { position: absolute; top: -30px; right: -20px; background: white; border-radius: 16px; padding: 20px; box-shadow: var(--shadow); animation: float 4s ease-in-out infinite; z-index: 3; }
+        .hero-float-card-top { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
+        .hero-float-card-num { font-size: 28px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+        .hero-float-card-label { font-size: 13px; color: var(--text-light); }
+
+        .trust-bar { background: var(--primary); padding: 40px; }
+        .trust-bar-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+        .trust-item { display: flex; align-items: center; gap: 16px; }
+        .trust-icon { width: 48px; height: 48px; background: rgba(255,255,255,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .trust-icon svg { width: 24px; height: 24px; stroke: var(--accent); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .trust-text strong { display: block; font-size: 16px; font-weight: 700; color: white; margin-bottom: 4px; }
+        .trust-text span { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+        .team { padding: 100px 40px; background: var(--bg-light); }
+        .team-grid { max-width: 1200px; margin: 0 auto; display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 20px; scrollbar-width: thin; scrollbar-color: var(--accent) var(--bg-dark); }
+        .team-grid::-webkit-scrollbar { height: 6px; }
+        .team-grid::-webkit-scrollbar-track { background: var(--bg-dark); border-radius: 10px; }
+        .team-grid::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        .team-card { flex: 0 0 320px; background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.4s ease; scroll-snap-align: start; }
+        .team-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+        .team-card-image { width: 100%; height: 280px; background: linear-gradient(135deg, var(--bg-dark), var(--border-light)); position: relative; overflow: hidden; }
+        .team-card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .team-card-info { padding: 24px; }
+        .team-card-name { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .team-card-role { font-size: 14px; color: var(--accent); font-weight: 600; margin-bottom: 12px; }
+        .team-card-exp { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+        .team-card-spec { font-size: 13px; color: var(--text-light); line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light); }
+        .team-card-spec strong { color: var(--primary); }
+        .team-lead { flex: 0 0 660px; display: flex; flex-direction: row; }
+        .team-lead-image { flex: 0 0 280px; height: auto; min-height: 380px; }
+        .team-lead-image img { width: 100%; height: 100%; object-fit: cover; }
+        .team-lead-info { padding: 32px; display: flex; flex-direction: column; justify-content: center; flex: 1; }
+        .team-lead-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: var(--bg-dark); border-radius: 50px; font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 16px; width: fit-content; }
+        .team-lead-name { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 8px; letter-spacing: -1px; }
+        .team-lead-role { font-size: 16px; color: var(--accent); font-weight: 600; margin-bottom: 16px; }
+        .team-lead-text { font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px; }
+        .team-lead-stats { display: flex; gap: 24px; }
+        .team-lead-stat strong { display: block; font-size: 22px; font-weight: 800; color: var(--primary); }
+        .team-lead-stat span { font-size: 12px; color: var(--text-muted); }
+        .team-scroll-hint { text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .team-scroll-hint svg { width: 20px; height: 20px; stroke: var(--text-muted); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* Horizontal scroll sections */
+        .scroll-section { padding: 80px 40px; }
+        .scroll-section-inner { max-width: 1200px; margin: 0 auto; }
+        .scroll-track { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 20px; scrollbar-width: thin; scrollbar-color: var(--accent) var(--bg-dark); -webkit-overflow-scrolling: touch; }
+        .scroll-track::-webkit-scrollbar { height: 6px; }
+        .scroll-track::-webkit-scrollbar-track { background: var(--bg-dark); border-radius: 10px; }
+        .scroll-track::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        .scroll-card { flex: 0 0 360px; background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.4s ease; border: 1px solid var(--border-light); scroll-snap-align: start; }
+        .scroll-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .scroll-card-image { width: 100%; height: 220px; overflow: hidden; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; }
+        .scroll-card-image img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 12px; }
+        .scroll-card-info { padding: 20px; }
+        .scroll-card-title { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .scroll-card-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+        .scroll-card-desc { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+        .scroll-card-amount { font-size: 20px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+        .scroll-card-label { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+        .scroll-hint { text-align: center; margin-top: 16px; color: var(--text-muted); font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .scroll-hint svg { width: 20px; height: 20px; stroke: var(--text-muted); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        .banks-section { padding: 60px 40px; background: var(--bg-light); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); overflow: hidden; }
+        .banks-section-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
+        .banks-label { display: inline-block; padding: 8px 20px; background: var(--bg-dark); border-radius: 50px; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px; }
+        .banks-title { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 40px; }
+        .banks-carousel { display: flex; gap: 48px; animation: scroll 30s linear infinite; width: max-content; }
+        .banks-carousel:hover { animation-play-state: paused; }
+        .bank-item { display: flex; align-items: center; justify-content: center; background: white; border-radius: 16px; padding: 20px 40px; box-shadow: var(--shadow); transition: all 0.3s ease; border: 1px solid var(--border-light); flex-shrink: 0; }
+        .bank-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--border); }
+        .bank-item span { font-size: 20px; font-weight: 700; color: #9aa5b1; transition: color 0.3s ease; }
+        .bank-item:hover span { color: var(--primary); }
+        .banks-wrapper { overflow: hidden; position: relative; }
+        .banks-wrapper::before, .banks-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 100px; z-index: 2; pointer-events: none; }
+        .banks-wrapper::before { left: 0; background: linear-gradient(90deg, var(--bg-light), transparent); }
+        .banks-wrapper::after { right: 0; background: linear-gradient(-90deg, var(--bg-light), transparent); }
+
+        .problems { padding: 100px 40px; background: var(--bg); }
+        .section-header { max-width: 1200px; margin: 0 auto 60px; text-align: center; }
+        .section-label { display: inline-block; padding: 8px 20px; background: var(--bg-dark); border-radius: 50px; font-size: 13px; font-weight: 600; color: var(--primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; color: var(--primary); margin-bottom: 16px; }
+        .section-subtitle { font-size: 18px; color: var(--text-light); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        .problems-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .problem-card { background: white; border-radius: 20px; padding: 40px 32px; border: 1px solid var(--border-light); transition: all 0.4s ease; position: relative; overflow: hidden; }
+        .problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); transform: scaleX(0); transition: transform 0.4s ease; }
+        .problem-card:hover::before { transform: scaleX(1); }
+        .problem-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--border); }
+        .problem-icon { width: 56px; height: 56px; background: var(--bg-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; transition: all 0.3s ease; }
+        .problem-card:hover .problem-icon { background: var(--primary); }
+        .problem-icon svg { width: 28px; height: 28px; stroke: var(--primary); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.3s ease; }
+        .problem-card:hover .problem-icon svg { stroke: white; }
+        .problem-card h3 { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 12px; letter-spacing: -0.3px; }
+        .problem-card p { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+
+        .process { padding: 100px 40px; background: var(--bg); }
+        .process-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; position: relative; }
+        .process-grid::before { content: ''; position: absolute; top: 40px; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); opacity: 0.3; z-index: 0; }
+        .process-step { text-align: center; position: relative; z-index: 1; padding: 0 16px; }
+        .process-step-num { width: 80px; height: 80px; background: white; border: 3px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 28px; font-weight: 800; color: var(--primary); transition: all 0.4s ease; position: relative; }
+        .process-step:hover .process-step-num { border-color: var(--accent); background: var(--accent); color: white; transform: scale(1.1); }
+        .process-step-icon { position: absolute; bottom: -8px; right: -8px; width: 32px; height: 32px; background: var(--bg-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .process-step-icon svg { width: 16px; height: 16px; stroke: var(--accent); stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .process-step h3 { font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .process-step p { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+
+        .calculator { padding: 100px 40px; background: var(--primary); color: white; position: relative; overflow: hidden; }
+        .calculator::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0, 210, 106, 0.1) 0%, transparent 70%); border-radius: 50%; }
+        .calculator-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; position: relative; z-index: 1; }
+        .calculator-text h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 20px; }
+        .calculator-text h2 em { font-style: normal; color: var(--accent); }
+        .calculator-text p { font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 32px; }
+        .calculator-features { list-style: none; }
+        .calculator-features li { display: flex; align-items: center; gap: 12px; padding: 12px 0; font-size: 15px; color: rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .calculator-features li::before { content: ''; width: 20px; height: 20px; background: var(--accent); border-radius: 50%; flex-shrink: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; }
+        .calculator-card { background: white; border-radius: 24px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .calculator-card h3 { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 24px; }
+        .calc-field { margin-bottom: 24px; }
+        .calc-field label { display: block; font-size: 13px; font-weight: 600; color: var(--text-light); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .calc-slider { width: 100%; -webkit-appearance: none; height: 8px; border-radius: 4px; background: var(--bg-dark); outline: none; }
+        .calc-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); cursor: pointer; box-shadow: 0 2px 8px rgba(0,210,106,0.4); }
+        .calc-slider::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); cursor: pointer; border: none; box-shadow: 0 2px 8px rgba(0,210,106,0.4); }
+        .calc-amount-display { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .calc-visual { display: flex; align-items: center; gap: 24px; margin: 24px 0; }
+        .calc-pie { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--accent) 0% 5%, var(--bg-dark) 5% 100%); position: relative; flex-shrink: 0; }
+        .calc-pie-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary); }
+        .calc-legend { display: flex; flex-direction: column; gap: 8px; }
+        .calc-legend-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-light); }
+        .calc-legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+        .calc-result { background: var(--bg-light); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
+        .calc-result-label { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+        .calc-result-value { font-size: 32px; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        .calc-result-note { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+        .calc-btn { width: 100%; padding: 18px; background: var(--accent); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; }
+        .calc-btn:hover { background: var(--accent-dark); transform: translateY(-2px); }
+
+        .reviews { padding: 100px 40px; background: var(--bg-light); }
+        .reviews-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .review-card { background: white; border-radius: 20px; padding: 32px; box-shadow: var(--shadow); transition: all 0.4s ease; }
+        .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .review-stars { display: flex; gap: 4px; margin-bottom: 16px; }
+        .review-star { width: 20px; height: 20px; background: var(--accent); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; }
+        .review-text { font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 20px; }
+        .review-author { display: flex; align-items: center; gap: 12px; }
+        .review-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-light)); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 700; }
+        .review-author-info strong { display: block; font-size: 14px; font-weight: 700; color: var(--primary); }
+        .review-author-info span { font-size: 13px; color: var(--text-muted); }
+        .review-amount { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; }
+        .review-amount-label { font-size: 13px; color: var(--text-muted); }
+        .review-amount-value { font-size: 18px; font-weight: 800; color: var(--accent); }
+
+        .faq { padding: 100px 40px; background: var(--bg); }
+        .faq-grid { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: white; border-radius: 16px; margin-bottom: 16px; border: 1px solid var(--border-light); overflow: hidden; transition: all 0.3s ease; }
+        .faq-item:hover { box-shadow: var(--shadow); }
+        .faq-item.active { border-color: var(--accent); }
+        .faq-question { display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; cursor: pointer; font-size: 16px; font-weight: 600; color: var(--primary); transition: all 0.3s ease; }
+        .faq-question:hover { background: var(--bg-light); }
+        .faq-question-icon { width: 28px; height: 28px; background: var(--bg-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; flex-shrink: 0; }
+        .faq-question-icon svg { width: 14px; height: 14px; stroke: var(--primary); stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s ease; }
+        .faq-item.active .faq-question-icon { background: var(--accent); }
+        .faq-item.active .faq-question-icon svg { stroke: white; transform: rotate(180deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 28px; }
+        .faq-item.active .faq-answer { max-height: 300px; padding: 0 28px 24px; }
+        .faq-answer p { font-size: 15px; color: var(--text-light); line-height: 1.7; }
+        .faq-answer strong { color: var(--primary); }
+        .faq-item.open-default { border-color: var(--accent); box-shadow: var(--shadow); }
+        .faq-item.open-default .faq-answer { max-height: 300px; padding: 0 28px 24px; }
+        .faq-item.open-default .faq-question-icon { background: var(--accent); }
+        .faq-item.open-default .faq-question-icon svg { stroke: white; transform: rotate(180deg); }
+
+        .cta-section { padding: 100px 40px; background: var(--bg); text-align: center; }
+        .cta-section-inner { max-width: 700px; margin: 0 auto; }
+        .cta-section h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; color: var(--primary); margin-bottom: 20px; }
+        .cta-section p { font-size: 18px; color: var(--text-light); line-height: 1.7; margin-bottom: 40px; }
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .cta-contacts { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
+        .cta-contact { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); transition: color 0.3s ease; }
+        .cta-contact:hover { color: var(--primary); }
+        .cta-contact-icon { width: 48px; height: 48px; background: var(--bg-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .cta-contact:hover .cta-contact-icon { background: var(--primary); }
+        .cta-contact-icon svg { width: 24px; height: 24px; stroke: var(--primary); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.3s ease; }
+        .cta-contact:hover .cta-contact-icon svg { stroke: white; }
+        .cta-contact-text strong { display: block; font-size: 16px; font-weight: 700; }
+        .cta-contact-text span { font-size: 13px; color: var(--text-muted); }
+
+        .floating-btn { position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; background: var(--wa); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); z-index: 999; transition: all 0.3s ease; cursor: pointer; text-decoration: none; }
+        .floating-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37, 211, 102, 0.5); }
+        .floating-btn svg { width: 28px; height: 28px; fill: white; }
+        .floating-btn-tooltip { position: absolute; right: 70px; top: 50%; transform: translateY(-50%); background: var(--primary); color: white; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; transition: all 0.3s ease; pointer-events: none; }
+        .floating-btn:hover .floating-btn-tooltip { opacity: 1; right: 75px; }
+
+        footer { background: var(--primary); color: white; padding: 60px 40px 30px; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 40px; }
+        .footer-brand h3 { font-size: 24px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.5px; }
+        .footer-brand h3 span { font-weight: 400; opacity: 0.7; }
+        .footer-brand p { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 20px; }
+        .footer-requisites { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+        .footer-col h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+        .footer-col a { display: block; color: rgba(255,255,255,0.7); text-decoration: none; padding: 8px 0; font-size: 14px; transition: all 0.3s ease; }
+        .footer-col a:hover { color: white; padding-left: 4px; }
+        .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .footer-bottom p { font-size: 13px; color: rgba(255,255,255,0.4); }
+        .footer-social { display: flex; gap: 12px; }
+        .footer-social a { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .footer-social a:hover { background: var(--accent); transform: translateY(-2px); }
+        .footer-social a svg { width: 18px; height: 18px; stroke: white; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        @media (max-width: 1024px) {
+            .hero-container { grid-template-columns: 1fr; gap: 60px; }
+            .hero-image-side { max-width: 500px; margin: 0 auto; }
+            .trust-bar-inner { grid-template-columns: repeat(2, 1fr); }
+            .problems-grid { grid-template-columns: repeat(2, 1fr); }
+            .team-grid { flex-wrap: nowrap; }
+            .team-lead { flex: 0 0 100%; }
+            .process-grid { grid-template-columns: repeat(3, 1fr); gap: 40px 0; }
+            .process-grid::before { display: none; }
+            .calculator-inner { grid-template-columns: 1fr; }
+            .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+            .scroll-card { flex: 0 0 320px; }
+            .scroll-card-image { height: 200px; }
+        }
+        @media (max-width: 640px) {
+            .header-inner { padding: 12px 20px; }
+            .header-nav { display: none; }
+            .hero { padding: 80px 20px 40px; }
+            .hero h1 { font-size: 32px; letter-spacing: -1px; }
+            .hero-subtitle { font-size: 15px; }
+            .hero-stats { gap: 20px; }
+            .hero-stat-num { font-size: 24px; }
+            .hero-cta { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; padding: 14px 24px; font-size: 14px; }
+            .hero-cta .btn-tg, .hero-cta .btn-wa { width: calc(50% - 8px); }
+            .hero-big-num { font-size: 72px; }
+            .hero-float-card { display: none; }
+
+            .trust-bar { padding: 24px 20px; }
+            .trust-bar-inner { grid-template-columns: 1fr 1fr; gap: 16px; }
+            .trust-icon { width: 36px; height: 36px; }
+            .trust-icon svg { width: 18px; height: 18px; }
+            .trust-text strong { font-size: 13px; }
+            .trust-text span { font-size: 11px; }
+
+            .problems { padding: 60px 0; }
+            .problems .section-header { padding: 0 20px; margin-bottom: 32px; }
+            .problems-grid { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 20px 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin: 0; max-width: none; }
+            .problems-grid::-webkit-scrollbar { display: none; }
+            .problems-grid .problem-card { flex: 0 0 280px; scroll-snap-align: start; padding: 28px 24px; margin: 0; }
+            .problem-icon { width: 44px; height: 44px; }
+            .problem-icon svg { width: 22px; height: 22px; }
+            .problem-card h3 { font-size: 15px; }
+            .problem-card p { font-size: 13px; }
+
+            .team { padding: 60px 0; }
+            .team .section-header { padding: 0 20px; }
+            .team-grid { gap: 16px; padding: 0 20px; }
+            .team-card { flex: 0 0 280px; }
+            .team-lead { flex: 0 0 100%; flex-direction: column; }
+            .team-lead-image { flex: none; min-height: 240px; }
+
+            .scroll-section { padding: 60px 0; }
+            .scroll-section .section-header { padding: 0 20px; }
+            .scroll-track { padding: 0 20px 16px; }
+            .scroll-card { flex: 0 0 280px; }
+            .scroll-card-image { height: 180px; }
+
+            .process { padding: 60px 0; }
+            .process .section-header { padding: 0 20px; margin-bottom: 32px; }
+            .process-grid { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 20px 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin: 0; max-width: none; }
+            .process-grid::-webkit-scrollbar { display: none; }
+            .process-grid::before { display: none; }
+            .process-step { flex: 0 0 240px; scroll-snap-align: start; padding: 0; text-align: left; }
+            .process-step-num { width: 56px; height: 56px; font-size: 20px; margin: 0 0 16px 0; }
+            .process-step h3 { font-size: 14px; }
+            .process-step p { font-size: 12px; }
+
+            .calculator { padding: 60px 20px; }
+            .calculator-inner { gap: 40px; }
+            .calculator-text h2 { font-size: 28px; }
+            .calculator-card { padding: 24px; }
+            .calc-result-value { font-size: 24px; }
+
+            .reviews { padding: 60px 0; }
+            .reviews .section-header { padding: 0 20px; margin-bottom: 32px; }
+            .reviews-grid { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 20px 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin: 0; max-width: none; }
+            .reviews-grid::-webkit-scrollbar { display: none; }
+            .reviews-grid .review-card { flex: 0 0 300px; scroll-snap-align: start; padding: 24px; margin: 0; }
+            .review-text { font-size: 13px; }
+            .review-amount-value { font-size: 16px; }
+
+            .faq { padding: 60px 0; }
+            .faq .section-header { padding: 0 20px; margin-bottom: 32px; }
+            .faq-grid { padding: 0 20px; }
+            .faq-question { padding: 18px 20px; font-size: 14px; }
+            .faq-answer { padding: 0 20px; }
+            .faq-item.active .faq-answer { padding: 0 20px 18px; }
+
+            .cta-section { padding: 60px 20px; }
+            .cta-section h2 { font-size: 28px; }
+            .cta-section p { font-size: 15px; }
+
+            .footer { padding: 40px 20px 20px; }
+            .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+            .footer-bottom { flex-direction: column; text-align: center; gap: 16px; }
+            .floating-btn { bottom: 16px; right: 16px; width: 52px; height: 52px; }
+            .calc-visual { flex-direction: column; align-items: flex-start; }
+            .section-title { font-size: 26px; }
+            .section-subtitle { font-size: 15px; }
+        }
+        html { scroll-behavior: smooth; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <header id="header">
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">Р</div>
+                <div class="logo-text">РЕДИБРОКЕР</div>
+            </div>
+            <nav class="header-nav">
+                <a href="#problems">Проблемы</a>
+                <a href="#team">Команда</a>
+                <a href="#process">Как работаем</a>
+                <a href="#calculator">Калькулятор</a>
+                <a href="#reviews">Отзывы</a>
+                <a href="#faq">FAQ</a>
+            </nav>
+            <div class="header-phone">
+                <a href="https://t.me/Readybroker" target="_blank">@Readybroker</a>
+                <span>Telegram — быстрый ответ</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Работаем официально по договору
+                </div>
+                <h1>
+                    Вам отказали<br>
+                    <em>5 банков?</em><br>
+                    Мы одобрили<br>
+                    847 таких случаев
+                </h1>
+                <p class="hero-subtitle">
+                    Сложная кредитная история, долги, просрочки, банкротство — 
+                    мы находим решение. Без предоплаты. Платите только после 
+                    получения денег.
+                </p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">847</span>
+                        <span class="hero-stat-label">Одобренных кредитов</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">0 ₽</span>
+                        <span class="hero-stat-label">Предоплата</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-num">94%</span>
+                        <span class="hero-stat-label">Успешных сделок</span>
+                    </div>
+                </div>
+                <div class="hero-cta">
+                    <a href="https://t.me/Readybroker" class="btn btn-tg">Написать в Telegram</a>
+                    <a href="https://wa.me/79953631067" class="btn btn-wa">Написать в WhatsApp</a>
+                    <a href="#calculator" class="btn btn-outline">Рассчитать стоимость</a>
+                </div>
+            </div>
+            <div class="hero-image-side">
+                <div class="hero-float-card">
+                    <div class="hero-float-card-top">Успешных сделок</div>
+                    <div class="hero-float-card-num">847</div>
+                    <div class="hero-float-card-label">за 2025-2026</div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-big-num">5%</div>
+                    <div class="hero-big-label">Наша комиссия от суммы кредита</div>
+                    <div class="hero-big-sub">Платите только после получения денег</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trust-bar">
+        <div class="trust-bar-inner">
+            <div class="trust-item">
+                <div class="trust-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                </div>
+                <div class="trust-text">
+                    <strong>Работаем по договору</strong>
+                    <span>Всё официально и прозрачно</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <div class="trust-text">
+                    <strong>Без предоплаты</strong>
+                    <span>Платите только после результата</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="trust-text">
+                    <strong>Срок от 1 дня</strong>
+                    <span>Быстрое одобрение</span>
+                </div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="trust-text">
+                    <strong>Команда из 4 экспертов</strong>
+                    <span>Юристы, аналитики, переговорщики</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="team" id="team">
+        <div class="section-header">
+            <div class="section-label">Наша команда</div>
+            <h2 class="section-title">Эксперты, которые решают</h2>
+            <p class="section-subtitle">Не один человек, а команда профессионалов. Каждый отвечает за свой участок работы.</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card team-lead anim">
+                <div class="team-lead-image">
+                    <img src="эмиль.jpg" alt="Сергей Каримов">
+                </div>
+                <div class="team-lead-info">
+                    <div class="team-lead-badge">Основатель и руководитель</div>
+                    <div class="team-lead-name">Сергей Каримов</div>
+                    <div class="team-lead-role">Главный брокер, партнёр ведущих банков РФ</div>
+                    <p class="team-lead-text">
+                        Официальный партнёр ведущих банков России с 2021 года. 
+                        Специализация — сложные случаи, клиенты с отказами в банках, 
+                        банкротство. Лично ведёт переговоры с банками 
+                        и контролирует каждую сделку. Знает все нюансы работы банков и умеет находить решения там, 
+                        где другие сдаются.
+                    </p>
+                    <div class="team-lead-stats">
+                        <div class="team-lead-stat">
+                            <strong>847</strong>
+                            <span>Одобрено</span>
+                        </div>
+                        <div class="team-lead-stat">
+                            <strong>5 лет</strong>
+                            <span>Опыт</span>
+                        </div>
+                        <div class="team-lead-stat">
+                            <strong>94%</strong>
+                            <span>Успех</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="team-card anim d1">
+                <div class="team-card-image">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face" alt="Анна Волкова">
+                </div>
+                <div class="team-card-info">
+                    <div class="team-card-name">Анна Волкова</div>
+                    <div class="team-card-role">Юрист, специалист по ипотеке</div>
+                    <div class="team-card-exp">Проверяет документы, готовит договоры, защищает интересы клиентов</div>
+                    <div class="team-card-spec">
+                        <strong>Специализация:</strong> Ипотечное кредитование, покупка недвижимости, рефинансирование ипотеки. Работает с СберБанком, ВТБ, Дом.РФ и другими крупными игроками рынка.
+                    </div>
+                </div>
+            </div>
+            <div class="team-card anim d2">
+                <div class="team-card-image">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face" alt="Дмитрий Соколов">
+                </div>
+                <div class="team-card-info">
+                    <div class="team-card-name">Дмитрий Соколов</div>
+                    <div class="team-card-role">Кредитный аналитик, автоэксперт</div>
+                    <div class="team-card-exp">Анализирует КИ, подбирает банки, прогнозирует шансы одобрения</div>
+                    <div class="team-card-spec">
+                        <strong>Специализация:</strong> Автокредитование, лизинг, кредиты на коммерческий транспорт. Партнёр Альфа-Банка, Т-Банка, Промсвязьбанка. Знает, как одобрить кредит даже со сложной КИ на авто.
+                    </div>
+                </div>
+            </div>
+            <div class="team-card anim d3">
+                <div class="team-card-image">
+                    <img src="пинчук елена.jpg" alt="Пинчук Елена">
+                </div>
+                <div class="team-card-info">
+                    <div class="team-card-name">Пинчук Елена</div>
+                    <div class="team-card-role">Менеджер, специалист по потребкредитам</div>
+                    <div class="team-card-exp">Ведёт клиентов от заявки до получения денег, отвечает на вопросы</div>
+                    <div class="team-card-spec">
+                        <strong>Специализация:</strong> Потребительское кредитование, кредитные карты, рефинансирование. Работает с МТС Банком, Газпромбанком, Совкомбанком. Помогает получить наличные даже с приставами и ограничениями.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="team-scroll-hint">
+            <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Листайте вправо, чтобы увидеть всю команду
+        </div>
+    </section>
+
+        <section class="scroll-section" id="certificates" style="background: var(--bg-light); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+        <div class="scroll-section-inner">
+            <div class="section-header" style="margin-bottom: 40px;">
+                <div class="section-label">Официальные партнёры</div>
+                <h2 class="section-title">Сертификаты и дипломы</h2>
+                <p class="section-subtitle">Работаем официально — подтверждено ведущими банками России.</p>
+            </div>
+            <div class="scroll-track">
+                <div class="scroll-card anim">
+                    <div class="scroll-card-image">
+                        <img src="certificate4.png" alt="Официальный партнёр Альфа-Банка">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-title">Официальный партнёр Альфа-Банка</div>
+                        <div class="scroll-card-sub">Статус подтверждён с 2021 года</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d1">
+                    <div class="scroll-card-image">
+                        <img src="certificate1.png" alt="Партнёр СБЕР Бизнес / Деловая среда">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-title">Партнёр СБЕР Бизнес / Деловая среда</div>
+                        <div class="scroll-card-sub">Официальный партнёр АО «Деловая среда»</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d2">
+                    <div class="scroll-card-image">
+                        <img src="certificate3.png" alt="Партнёр Банка ВТБ (ПАО)">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-title">Партнёр Банка ВТБ (ПАО)</div>
+                        <div class="scroll-card-sub">По ипотечному жилищному кредитованию</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d3">
+                    <div class="scroll-card-image">
+                        <img src="certificate2.png" alt="Партнёр АО «Райффайзенбанк»">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-title">Партнёр АО «Райффайзенбанк»</div>
+                        <div class="scroll-card-sub">По программам ипотечного кредитования</div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                Листайте вправо
+            </div>
+        </div>
+    </section>
+
+    <section class="banks-section">
+        <div class="banks-section-inner">
+            <div class="banks-label">Банки</div>
+            <h2 class="banks-title">Мы работаем со всеми банками РФ</h2>
+            <div class="banks-wrapper">
+                <div class="banks-carousel">
+                    <div class="bank-item"><span style="color:#EF3124;">Альфа-Банк</span></div>
+                    <div class="bank-item"><span style="color:#1A1F71;">СберБанк</span></div>
+                    <div class="bank-item"><span style="color:#FF6600;">Промсвязьбанк</span></div>
+                    <div class="bank-item"><span style="color:#003399;">ВТБ</span></div>
+                    <div class="bank-item"><span style="color:#00A0E3;">Т-Банк</span></div>
+                    <div class="bank-item"><span style="color:#E31E24;">МТС Банк</span></div>
+                    <div class="bank-item"><span style="color:#0066B3;">Газпромбанк</span></div>
+                    <div class="bank-item"><span style="color:#009639;">Россельхозбанк</span></div>
+                    <div class="bank-item"><span style="color:#003087;">Совкомбанк</span></div>
+                    <div class="bank-item"><span style="color:#F26522;">Уралсиб</span></div>
+                    <div class="bank-item"><span style="color:#EF3124;">Альфа-Банк</span></div>
+                    <div class="bank-item"><span style="color:#1A1F71;">СберБанк</span></div>
+                    <div class="bank-item"><span style="color:#FF6600;">Промсвязьбанк</span></div>
+                    <div class="bank-item"><span style="color:#003399;">ВТБ</span></div>
+                    <div class="bank-item"><span style="color:#00A0E3;">Т-Банк</span></div>
+                    <div class="bank-item"><span style="color:#E31E24;">МТС Банк</span></div>
+                    <div class="bank-item"><span style="color:#0066B3;">Газпромбанк</span></div>
+                    <div class="bank-item"><span style="color:#009639;">Россельхозбанк</span></div>
+                    <div class="bank-item"><span style="color:#003087;">Совкомбанк</span></div>
+                    <div class="bank-item"><span style="color:#F26522;">Уралсиб</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problems" id="problems">
+        <div class="section-header">
+            <div class="section-label">С какими ситуациями работаем</div>
+            <h2 class="section-title">Решаем сложные случаи</h2>
+            <p class="section-subtitle">Если банки отказали — вы по адресу. Мы специализируемся на проблемных ситуациях.</p>
+        </div>
+        <div class="problems-grid">
+            <div class="problem-card anim d1">
+                <div class="problem-icon">
+                    <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                </div>
+                <h3>Сложная кредитная история</h3>
+                <p>Просрочки, штрафы, испорченная КИ — знаем банки, которые готовы работать с такими случаями</p>
+            </div>
+            <div class="problem-card anim d2">
+                <div class="problem-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+                </div>
+                <h3>Долги и просрочки</h3>
+                <p>Открытые кредиты, задолженности, приставы — находим выход даже в сложных ситуациях</p>
+            </div>
+            <div class="problem-card anim d3">
+                <div class="problem-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                </div>
+                <h3>После банкротства</h3>
+                <p>Банкротство — не приговор. Знаем банки, которые готовы рассматривать заявки после банкротства</p>
+            </div>
+            <div class="problem-card anim d1">
+                <div class="problem-icon">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <h3>Приставы и ограничения</h3>
+                <p>Долги по исполнительному листу, ограничения со стороны приставов — есть банки и МФО, которые рассматривают такие случаи</p>
+            </div>
+            <div class="problem-card anim d2">
+                <div class="problem-icon">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <h3>Отказали все банки</h3>
+                <p>Обошли 10 банков и везде отказ? Это наша специализация. У нас прямые контакты в кредитных отделах и понимание внутренних критериев банков</p>
+            </div>
+            <div class="problem-card anim d3">
+                <div class="problem-icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <h3>Ограничения в банках</h3>
+                <p>Находитесь в ограниченном списке банков? Работаем с МФО, частными инвесторами и альтернативными программами</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="process" id="process">
+        <div class="section-header">
+            <div class="section-label">Прозрачный процесс</div>
+            <h2 class="section-title">Как мы работаем</h2>
+            <p class="section-subtitle">Каждый шаг — documented. Вы всегда знаете, на какой стадии ваша заявка.</p>
+        </div>
+        <div class="process-grid">
+            <div class="process-step anim">
+                <div class="process-step-num">
+                    1
+                    <div class="process-step-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                </div>
+                <h3>Консультация</h3>
+                <p>Бесплатно. Анализируем вашу ситуацию, оцениваем реальные шансы</p>
+            </div>
+            <div class="process-step anim d1">
+                <div class="process-step-num">
+                    2
+                    <div class="process-step-icon">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                </div>
+                <h3>Договор</h3>
+                <p>Подписываем официальный договор. Всё прозрачно и легально</p>
+            </div>
+            <div class="process-step anim d2">
+                <div class="process-step-num">
+                    3
+                    <div class="process-step-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    </div>
+                </div>
+                <h3>Анализ</h3>
+                <p>Проверяем КИ, подбираем банки, помогаем собрать минимальный пакет документов</p>
+            </div>
+            <div class="process-step anim d3">
+                <div class="process-step-num">
+                    4
+                    <div class="process-step-icon">
+                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                </div>
+                <h3>Заявки</h3>
+                <p>Подаём в подходящие банки. Вы получаете уведомление об одобрении</p>
+            </div>
+            <div class="process-step anim d4">
+                <div class="process-step-num">
+                    5
+                    <div class="process-step-icon">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
+                    </div>
+                </div>
+                <h3>Оплата</h3>
+                <p>Кредит получен — теперь вы оплачиваете нашу комиссию 5%</p>
+            </div>
+        </div>
+    </section>
+    <section class="calculator" id="calculator">
+        <div class="calculator-inner">
+            <div class="calculator-text">
+                <h2>Сколько стоит<br><em>наша помощь?</em></h2>
+                <p>Никаких скрытых платежей. Наша комиссия — 5% от суммы одобренного кредита. Это единственный платёж, который вы делаете нам. Если не одобрили — вы ничего не платите.</p>
+                <ul class="calculator-features">
+                    <li>Бесплатный разбор ситуации</li>
+                    <li>Анализ кредитной истории</li>
+                    <li>Подбор подходящих банков</li>
+                    <li>Подача заявок</li>
+                    <li>Сопровождение до получения денег</li>
+                </ul>
+            </div>
+            <div class="calculator-card">
+                <h3>Калькулятор стоимости</h3>
+                <div class="calc-field">
+                    <label>Сумма кредита</label>
+                    <div class="calc-amount-display" id="amountDisplay">500 000 ₽</div>
+                    <input type="range" class="calc-slider" id="calcSlider" min="100000" max="5000000" step="50000" value="500000" oninput="calculateSlider()">
+                </div>
+                <div class="calc-field">
+                    <label>Ваша ситуация</label>
+                    <select id="calcType" onchange="calculateSlider()">
+                        <option value="5">Сложная КИ / просрочки</option>
+                        <option value="5">Банкротство в прошлом</option>
+                        <option value="5">Приставы и ограничения</option>
+                        <option value="5">Отказы во всех банках</option>
+                        <option value="5">Ограничения в банках</option>
+                    </select>
+                </div>
+                <div class="calc-visual">
+                    <div class="calc-pie">
+                        <div class="calc-pie-center">5%</div>
+                    </div>
+                    <div class="calc-legend">
+                        <div class="calc-legend-item">
+                            <div class="calc-legend-dot" style="background: var(--accent);"></div>
+                            <span>Наша комиссия — 5%</span>
+                        </div>
+                        <div class="calc-legend-item">
+                            <div class="calc-legend-dot" style="background: var(--bg-dark);"></div>
+                            <span>Ваш кредит — 95%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="calc-result">
+                    <div class="calc-result-label">Наша комиссия</div>
+                    <div class="calc-result-value" id="calcResult">25 000 ₽</div>
+                    <div class="calc-result-note">Наша комиссия — 5% от суммы кредита</div>
+                </div>
+                <button class="calc-btn" onclick="document.getElementById('cta-section').scrollIntoView({behavior: 'smooth'})">Оставить заявку</button>
+            </div>
+        </div>
+    </section>
+
+        <section class="scroll-section" id="approvals" style="background: var(--bg);">
+        <div class="scroll-section-inner">
+            <div class="section-header" style="margin-bottom: 40px;">
+                <div class="section-label">Реальные одобрения</div>
+                <h2 class="section-title">Скриншоты из банковских приложений</h2>
+                <p class="section-subtitle">Это не слова — это реальные одобрения, которые получили наши клиенты.</p>
+            </div>
+            <div class="scroll-track">
+                <div class="scroll-card anim">
+                    <div class="scroll-card-image">
+                        <img src="кредит1.jpg" alt="Автокредит — одобрено">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-amount">1 500 000 ₽</div>
+                        <div class="scroll-card-label">Автокредит — одобрено</div>
+                        <div class="scroll-card-desc">Клиент получил одобрение на автокредит за 2 дня. Комиссия: 75 000 ₽</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d1">
+                    <div class="scroll-card-image">
+                        <img src="кредит7.jpg" alt="Ставка 31,9%, срок 5 лет">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-amount">599 999 ₽</div>
+                        <div class="scroll-card-label">Ставка 31,9%, срок 5 лет</div>
+                        <div class="scroll-card-desc">Платёж 20 118 ₽/мес. Комиссия: 30 000 ₽</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d2">
+                    <div class="scroll-card-image">
+                        <img src="кредит8.jpg" alt="Деньги зачислены на карту МИР">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-amount">2 265 286 ₽</div>
+                        <div class="scroll-card-label">Деньги зачислены на карту МИР</div>
+                        <div class="scroll-card-desc">Сложная КИ, приставы. Комиссия: 113 264 ₽</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d3">
+                    <div class="scroll-card-image">
+                        <img src="кредит9.jpg" alt="Рефинансирование, ставка 37,49%">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-amount">1 012 000 ₽</div>
+                        <div class="scroll-card-label">Рефинансирование, ставка 37,49%</div>
+                        <div class="scroll-card-desc">Срок 60 мес, платёж 37 600 ₽. Комиссия: 50 600 ₽</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d1">
+                    <div class="scroll-card-image">
+                        <img src="кредит одобрено2.jpg" alt="Ставка 17,05%, срок 5 лет">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-amount">429 461 ₽</div>
+                        <div class="scroll-card-label">Ставка 17,05%, срок 5 лет</div>
+                        <div class="scroll-card-desc">Платёж 10 685 ₽/мес. Комиссия: 21 473 ₽</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d2">
+                    <div class="scroll-card-image">
+                        <img src="кредит3.jpg" alt="Кредит оформлен через ФинРешение">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-amount">1 715 000 ₽</div>
+                        <div class="scroll-card-label">Кредит оформлен через ФинРешение</div>
+                        <div class="scroll-card-desc">Клиент с просрочками получил одобрение за 2 дня. Комиссия: 85 750 ₽</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d3">
+                    <div class="scroll-card-image">
+                        <img src="кредит4.jpg" alt="Ставка 24,5%, срок 15 лет">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-amount">1 800 000 ₽</div>
+                        <div class="scroll-card-label">Ставка 24,5%, срок 15 лет</div>
+                        <div class="scroll-card-desc">После отказов в 4 банках — одобрение в 5-м. Комиссия: 90 000 ₽</div>
+                    </div>
+                </div>
+                <div class="scroll-card anim d4">
+                    <div class="scroll-card-image">
+                        <img src="кредит5.jpg" alt="Ипотека + кредит 824 000 ₽">
+                    </div>
+                    <div class="scroll-card-info">
+                        <div class="scroll-card-amount">8 781 997 ₽</div>
+                        <div class="scroll-card-label">Ипотека + кредит 824 000 ₽</div>
+                        <div class="scroll-card-desc">Приставы + ограничения. Комиссия: 480 300 ₽</div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-hint">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                Листайте вправо
+            </div>
+        </div>
+    </section>
+
+    <section class="reviews" id="reviews">
+        <div class="section-header">
+            <div class="section-label">Отзывы клиентов</div>
+            <h2 class="section-title">Реальные истории</h2>
+            <p class="section-subtitle">Отзывы клиентов, с которыми мы работали лично.</p>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card anim d1">
+                <div class="review-stars">
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                </div>
+                <p class="review-text">"Думал, что после банкротства кредит невозможен. Обошёл 6 банков — везде отказ. Эмиль нашёл банк, который одобрил 1.2 млн за 3 дня. Профессионал. Комиссия 5% — честно и прозрачно."</p>
+                <div class="review-author">
+                    <div class="review-avatar">ИК</div>
+                    <div class="review-author-info">
+                        <strong>Игорь К.</strong>
+                        <span>Москва, 42 года · Июнь 2026</span>
+                    </div>
+                </div>
+                <div class="review-amount">
+                    <span class="review-amount-label">Одобрено:</span>
+                    <span class="review-amount-value">1 200 000 ₽</span>
+                </div>
+            </div>
+            <div class="review-card anim d2">
+                <div class="review-stars">
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                </div>
+                <p class="review-text">"Сложная КИ, 3 просрочки, приставы. Думал, всё пропало. Анна проверила документы, Дмитрий подобрал банк. Одобрили 850 тыс. без предоплаты. Оплатил 5% после получения денег."</p>
+                <div class="review-author">
+                    <div class="review-avatar">МС</div>
+                    <div class="review-author-info">
+                        <strong>Марина С.</strong>
+                        <span>Санкт-Петербург, 35 лет · Май 2026</span>
+                    </div>
+                </div>
+                <div class="review-amount">
+                    <span class="review-amount-label">Одобрено:</span>
+                    <span class="review-amount-value">850 000 ₽</span>
+                </div>
+            </div>
+            <div class="review-card anim d3">
+                <div class="review-stars">
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                    <div class="review-star">★</div>
+                </div>
+                <p class="review-text">"Приставы и ограничения, долг 400 тыс. Нужно было срочно 500 тыс. на лечение. Елена вела мою заявку, всё объясняла. Одобрили за 2 дня. Комиссия 5% — честная цена."</p>
+                <div class="review-author">
+                    <div class="review-avatar">АВ</div>
+                    <div class="review-author-info">
+                        <strong>Алексей В.</strong>
+                        <span>Екатеринбург, 38 лет · Апрель 2026</span>
+                    </div>
+                </div>
+                <div class="review-amount">
+                    <span class="review-amount-label">Одобрено:</span>
+                    <span class="review-amount-value">500 000 ₽</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq" id="faq">
+        <div class="section-header">
+            <div class="section-label">Частые вопросы</div>
+            <h2 class="section-title">Отвечаем на ваши страхи и сомнения</h2>
+            <p class="section-subtitle">Мы знаем, что вас беспокоит. Вот честные ответы на самые важные вопросы.</p>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item open-default">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active'); this.parentElement.classList.toggle('open-default')">
+                    <span>А вдруг вы мошенники и возьмете предоплату?</span>
+                    <div class="faq-question-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Мы не берем предоплату.</strong> Никогда. Вы платите только после того, как деньги окажутся на вашем счету. Работаем по официальному договору, который защищает ваши интересы. Если кредит не одобрят — вы ничего не платите.</p>
+                </div>
+            </div>
+            <div class="faq-item open-default">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active'); this.parentElement.classList.toggle('open-default')">
+                    <span>А если банки уже отказали, есть ли смысл обращаться?</span>
+                    <div class="faq-question-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Именно в этом наша специализация.</strong> 847 из наших клиентов пришли к нам после отказов в 3+ банках. Мы знаем, какие банки рассматривают сложные случаи, как правильно подать документы и как вести переговоры. Обычный человек не знает этих нюансов — мы знаем.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>Сколько реально стоит ваша помощь?</span>
+                    <div class="faq-question-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Ровно 5% от суммы одобренного кредита.</strong> Никаких скрытых платежей, никаких дополнительных сборов. Если вам одобрили 1 000 000 ₽ — наша комиссия 50 000 ₽. Если 500 000 ₽ — 25 000 ₽. Всё прозрачно и прописано в договоре.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>Могут ли мои данные попасть к третьим лицам?</span>
+                    <div class="faq-question-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Нет, ваши данные в полной безопасности.</strong> Мы работаем по договору о конфиденциальности. Ваши персональные данные используются только для подачи заявок в банки и никогда не передаются третьим лицам. Мы ценим доверие клиентов.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>А вдруг меня обманут и не одобрят, но деньги возьмут?</span>
+                    <div class="faq-question-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Это технически невозможно.</strong> Мы не берем деньги до получения кредита. Оплата происходит только после того, как вы лично подтвердите получение денег на счет. До этого момента вы нам ничего не должны.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>Как долго занимает весь процесс?</span>
+                    <div class="faq-question-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>От 1 дня до 2 недель.</strong> В простых случаях — одобрение в течение 1-3 дней. В сложных (после банкротства, с приставами и ограничениями) — до 2 недель. Мы всегда держим вас в курсе и сообщаем о каждом этапе.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>Можно ли получить кредит после банкротства?</span>
+                    <div class="faq-question-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Да, можно.</strong> Мы уже помогли десяткам клиентов после банкротства. Есть банки, которые готовы рассматривать такие заявки спустя определенное время. Мы знаем, в какие банки обращаться и как правильно подготовить пакет документов.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    <span>Что если мне откажут и вы не сможете помочь?</span>
+                    <div class="faq-question-icon">
+                        <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Если мы не сможем помочь — вы ничего не платите.</strong> Мы беремся только за те дела, где видим реальные шансы. На бесплатном разборе ситуации мы честно скажем, реально ли получить кредит в вашей ситуации. Если шансов нет — скажем прямо.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta-section">
+        <div class="cta-section-inner">
+            <h2>Готовы помочь прямо сейчас</h2>
+            <p>Напишите или позвоните — мы оценим вашу ситуацию и скажем, реально ли получить кредит. Бесплатно и без обязательств.</p>
+            <div class="cta-buttons">
+                <a href="https://t.me/Readybroker" class="btn btn-tg">Написать в Telegram</a>
+                <a href="https://wa.me/79953631067" class="btn btn-wa">Написать в WhatsApp</a>
+                <a href="#calculator" class="btn btn-outline">Рассчитать стоимость</a>
+            </div>
+            <div class="cta-contacts">
+
+                <a href="https://t.me/Readybroker" class="cta-contact">
+                    <div class="cta-contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 3L2 12l7 3 9-8-8 9 3 7 9-18z"/></svg>
+                    </div>
+                    <div class="cta-contact-text">
+                        <strong>Telegram</strong>
+                        <span>Написать сообщение</span>
+                    </div>
+                </a>
+                <a href="https://wa.me/79953631067" class="cta-contact">
+                    <div class="cta-contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    </div>
+                    <div class="cta-contact-text">
+                        <strong>WhatsApp</strong>
+                        <span>Написать сообщение</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <h3>РЕДИБРОКЕР</h3>
+                <p>
+                    ИП Каримов Эмиль Геннадьевич<br>
+                    Кредитный брокер. Помогаем получить кредит в любой ситуации.<br>
+                    Без предоплаты. Оплата только после результата.
+                </p>
+                <div class="footer-requisites">
+                    ИНН: 123456789012<br>
+                    ОГРНИП: 123456789012345<br>
+                    г. Москва, ул. Примерная, д. 1, оф. 101
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Услуги</h4>
+                <a href="#">Кредит со сложной КИ</a>
+                <a href="#">После банкротства</a>
+                <a href="#">Приставы и ограничения</a>
+            </div>
+            <div class="footer-col">
+                <h4>Компания</h4>
+                <a href="#team">Команда</a>
+                <a href="#process">Как работаем</a>
+                <a href="#reviews">Отзывы</a>
+                <a href="#faq">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <a href="https://t.me/Readybroker">Telegram</a>
+                <a href="https://wa.me/79953631067">WhatsApp</a>
+                <a href="mailto:redibroker@mail.ru">redibroker@mail.ru</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 ИП Каримов Э.Г. Все права защищены.</p>
+            <div class="footer-social">
+                <a href="https://t.me/Readybroker">
+                    <svg viewBox="0 0 24 24"><path d="M21 3L2 12l7 3 9-8-8 9 3 7 9-18z"/></svg>
+                </a>
+                <a href="https://wa.me/79953631067">
+                    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/79953631067" class="floating-btn" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span class="floating-btn-tooltip">Написать в WhatsApp</span>
+    </a>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.anim').forEach(el => observer.observe(el));
+
+        function calculateSlider() {
+            const amount = parseInt(document.getElementById('calcSlider').value) || 0;
+            const rate = 5;
+            const commission = Math.round(amount * rate / 100);
+            document.getElementById('calcResult').textContent = commission.toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('amountDisplay').textContent = amount.toLocaleString('ru-RU') + ' ₽';
+            document.querySelector('.calc-result-note').textContent = 'Наша комиссия — ' + rate + '% от суммы кредита';
+        }
+
+        calculateSlider();
+    </script>
+
+</body>
+</html>
